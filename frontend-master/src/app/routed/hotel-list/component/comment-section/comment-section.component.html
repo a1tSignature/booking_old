@@ -1,0 +1,39 @@
+
+<h3 align="center">Отзывы</h3>
+
+<div class="comment-section">
+  <button (click)="openDialog()" *appPermission="Role.TENANT" >
+    <mat-icon id="add">add icon</mat-icon>
+  </button>
+    <mat-card class="comment-card" *ngFor="let comment of comments">
+
+      <mat-card-subtitle>
+        <div class="user-icon">
+          <mat-icon>account_circle</mat-icon>
+        </div>
+        <div class="user-name">
+          {{comment.createdBy}}
+        </div>
+      </mat-card-subtitle>
+      <mat-card-title>
+        <div class="title">
+          {{comment.title}}
+        </div>
+      </mat-card-title>
+      <mat-card-content>
+        {{comment.text}}
+      </mat-card-content>
+
+
+      <div style="width: 100%">
+        <div class="rating align-content-center">
+            <bar-rating [(rate)]="comment.rating" [max]="5" [theme]="'stars'" [readOnly]="true"></bar-rating>
+        </div>
+      </div>
+      <mat-card-footer >
+        <div class="date">
+          {{comment.createdAt|date}}
+        </div>
+      </mat-card-footer>
+    </mat-card>
+</div>

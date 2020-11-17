@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - preConditions:
+      - dbms:
+          type: postgresql
+  - changeSet:
+      id: drop_rooms_reserv_and_fix_booked_rooms
+      author: Ryabovskii
+      comment: drop_rooms_reserv_and_fix_booked_rooms
+      changes:
+        - sqlFile:
+            - path: drop_rooms_reserv.sql
+            - relativeToChangelogFile: true
+

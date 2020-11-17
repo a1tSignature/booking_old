@@ -1,0 +1,92 @@
+<div *ngIf="hotel | async ;else loading" class="row">
+  <div class="col-12">
+      <form [formGroup]="hotelForm">
+        <div align="center" mat-dialog-title>
+          <h2>Обновление информации об отеле</h2>
+
+        <mat-form-field id="name">
+          <mat-label class="field-title">Название отеля</mat-label>
+          <input matInput formControlName="name" placeholder="Ex. Plaza">
+        </mat-form-field>
+          <mat-error *ngIf="hotelForm.controls['name'].invalid">
+            Название не должно быть короче 4 символов
+          </mat-error>
+        </div>
+        <mat-dialog-content>
+          <mat-form-field class="fullWidthInput" >
+            <mat-label class="field-title">Описание отеля</mat-label>
+            <textarea matInput id="description" id="f2" formControlName="description" name="description" maxlength="450" required></textarea>
+          </mat-form-field>
+
+          <mat-error *ngIf="hotelForm.controls['description'].invalid">
+            Описание не должно быть короче 50 символов
+          </mat-error>
+
+            <h2 id="f3">Расположение</h2>
+          <table [formGroup]="hotelForm.get('location')" class="example-full-width" cellspacing="0">
+            <tr>
+              <td>
+                <mat-form-field class="example-full-width">
+                  <mat-label>Страна</mat-label>
+                  <input matInput formControlName="country" placeholder="Ex. Russia">
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field class="example-full-width">
+                  <mat-label>Город</mat-label>
+                  <input matInput formControlName="city" placeholder="Ex. Voronezh">
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field class="example-full-width">
+                  <mat-label>Улица</mat-label>
+                  <input matInput formControlName="street" placeholder="Ex. Voroshilova">
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field class="example-full-width">
+                  <mat-label>Строение</mat-label>
+                  <input matInput formControlName="house" #houseNumber maxlength="5" placeholder="Ex. 21d">
+                  <mat-hint align="end">{{houseNumber.value.length}} / 5</mat-hint>
+                </mat-form-field>
+              </td>
+            </tr>
+          </table>
+
+          <mat-error *ngIf="hotelForm.controls['location'].invalid">
+            Некорректный адрес
+          </mat-error>
+
+          <mat-card-title>
+            <p id="f4">Удобства</p>
+          </mat-card-title>
+          <mat-form-field class="fullWidthInput">
+            <mat-chip-list #chipList aria-label="Fruit selection">
+              <mat-chip *ngFor="let amenity of amenities" [selectable]="selectable"
+                        [removable]="removable" (removed)="remove(amenity)">
+                {{amenity}}
+                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+              </mat-chip>
+              <input placeholder="Добавить новое ..."
+                     [matChipInputFor]="chipList"
+                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                     [matChipInputAddOnBlur]="addOnBlur"
+                     (matChipInputTokenEnd)="add($event)">
+            </mat-chip-list>
+          </mat-form-field>
+          <mat-error *ngIf="hotelForm.controls['amenities'].invalid">
+            Необходимо указать минимум 4 удобства
+          </mat-error>
+        </mat-dialog-content>
+        <mat-dialog-actions>
+          <button mat-button color="primary"(click)="send()" [disabled]="hotelForm.invalid">Подтвердить</button>
+          <button mat-button color="warn" (click)="close()" [disabled]="hotelForm.invalid">Закрыть</button>
+        </mat-dialog-actions>
+      </form>
+
+  </div>
+</div>
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>
+

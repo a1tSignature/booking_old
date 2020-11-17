@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "pathToSave",
+      "type": "java.lang.String",
+      "description": "Description for pathToSave."
+  }
+] }

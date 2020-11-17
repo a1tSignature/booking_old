@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true">
+        <processor name="Lombok" />
+      </profile>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.12/48e4e5d60309ebd833bc528dcf77668eab3cd72c/lombok-1.18.12.jar" />
+        </processorPath>
+        <module name="bd.miniBooking.bd.main" />
+      </profile>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mapstruct/mapstruct-processor/1.4.0.Beta2/72a8660d06fe2cc5a5344a67377cbf469f8e3902/mapstruct-processor-1.4.0.Beta2.jar" />
+        </processorPath>
+        <module name="services.miniBooking.services.test" />
+      </profile>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <option name="mapstruct.defaultComponentModel" value="spring" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.2/524e0a697e9d62950b2f763d88d35cd8dc82a9a1/lombok-1.18.2.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mapstruct/mapstruct-processor/1.4.0.Beta2/72a8660d06fe2cc5a5344a67377cbf469f8e3902/mapstruct-processor-1.4.0.Beta2.jar" />
+        </processorPath>
+        <module name="services.miniBooking.services.main" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="12">
+      <module name="backend-master.miniBooking.main" target="12" />
+      <module name="backend-master.miniBooking.test" target="12" />
+      <module name="bd.miniBooking.bd.main" target="12" />
+      <module name="bd.miniBooking.bd.test" target="12" />
+      <module name="commons.miniBooking.commons.main" target="12" />
+      <module name="commons.miniBooking.commons.test" target="12" />
+      <module name="miniBooking.bd.main" target="12" />
+      <module name="miniBooking.bd.test" target="12" />
+      <module name="miniBooking.commons.main" target="12" />
+      <module name="miniBooking.commons.test" target="12" />
+      <module name="miniBooking.main" target="12" />
+      <module name="miniBooking.security.main" target="12" />
+      <module name="miniBooking.security.test" target="12" />
+      <module name="miniBooking.services.main" target="12" />
+      <module name="miniBooking.services.test" target="12" />
+      <module name="miniBooking.test" target="12" />
+      <module name="security.miniBooking.security.main" target="12" />
+      <module name="security.miniBooking.security.test" target="12" />
+      <module name="services.miniBooking.services.main" target="12" />
+      <module name="services.miniBooking.services.test" target="12" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="miniBooking.security.main" options="--add-exports=java.xml.crypto/com.sun.org.slf4j.internal=ALL-UNNAMED" />
+    </option>
+  </component>
+</project>

@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - preConditions:
+      - dbms:
+          type: postgresql
+  - changeSet:
+      id: booking_add_rooms_reservations
+      author: Boychenko
+      comment: Create initial rooms_reservations information
+      changes:
+        - sqlFile:
+            path: booking_add_rooms_reservations.sql
+            relativeToChangelogFile: true

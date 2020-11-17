@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.relex.miniBooking.bd.mapper.RoomMapper">
+
+    <select id="addRoom"
+            parameterType="ru.relex.miniBooking.bd.model.RoomModel"
+            resultType="ru.relex.miniBooking.bd.model.RoomModel">
+        INSERT INTO rooms (hotel_id, beds, daily_Price, description)
+        VALUES (#{hotelId}, #{beds}, #{dailyPrice}, #{description})
+            RETURNING room_id AS id, hotel_id AS hotelId, beds, daily_Price AS dailyPrice, description
+    </select>
+
+
+    <update id="updateRoom" parameterType="ru.relex.miniBooking.bd.model.RoomModel">
+        UPDATE rooms
+        SET beds         = #{beds},
+            daily_Price  = #{dailyPrice},
+            description  = #{description}
+        WHERE room_id = #{id};
+    </update>
+
+
+</mapper>

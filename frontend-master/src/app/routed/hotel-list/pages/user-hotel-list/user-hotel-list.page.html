@@ -1,0 +1,47 @@
+<div class="block">
+  <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+  <div class="container">
+
+    <h1 *ngIf="items.length > 0"><span>{{username}}</span>, список ваших отелей:</h1>
+    <h1 *ngIf="items.length == 0"><span>{{username}}</span>, список ваших отелей пуст</h1>
+
+    <div class="row" id="item"
+         *ngFor="let hotel of items">
+      <div class="col-4 toCenterBlock">
+        <a [routerLink]="['/hotels/',hotel.id]" class="toCenterBlock">
+          <div class="title toCenterBlock">{{hotel.name}}</div>
+        </a>
+      </div>
+      <div class="col-2 toCenterBlock">
+        <a [routerLink]="['/hotels/',hotel.id]" class="toCenterBlock">
+          <div class="location toCenterBlock">{{hotel.location |hotelLocationPipe}}</div>
+        </a>
+      </div>
+      <div class="col-1">
+        <button mat-icon-button color="accent" (click)="openHotelDialog(hotel.id)"
+                aria-label="Example icon button with a heart icon">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+      <div class="col-1">
+        <button mat-icon-button color="primary" (click)="openImagesDialog(hotel.id)"
+                aria-label="Example icon button with a heart icon">
+          <mat-icon>add_a_photo</mat-icon>
+        </button>
+      </div>
+      <div class="col-1">
+        <button mat-icon-button color="warn" (click)="deleteItem(hotel.id)"
+                aria-label="Example icon button with a heart icon">
+          <mat-icon>delete_forever</mat-icon>
+        </button>
+      </div>
+      <div class="col-1">
+        <button mat-icon-button color="warn" (click)="openRoomsDialog(hotel.id)"
+                aria-label="Example icon button with a heart icon">
+          <mat-icon>playlist_add</mat-icon>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

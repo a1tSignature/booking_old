@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.relex.miniBooking.bd.mapper.CommentMapper">
+
+    <select id="addComment"
+            parameterType="ru.relex.miniBooking.bd.model.CommentModel"
+            resultType="ru.relex.miniBooking.bd.model.CommentModel">
+        INSERT INTO comments (hotel_id, created_by, title, text, rating)
+        VALUES (#{hotelId}, #{createdBy}, #{title}, #{text},
+                #{rating})
+            RETURNING id
+             , created_at
+    </select>
+
+    <resultMap id="CommentList" type="ru.relex.miniBooking.commons.model.ListModel">
+        <result property="amount" column="count"/>
+        <collection property="list" ofType="ru.relex.miniBooking.bd.model.CommentModel">
+            <result property = "id"  column = "id"/>
+            <result property="hotelId" column="hotel_id"/>
+            <result property="title" column="title"/>
+            <result property="createdBy" column="created_by"/>
+            <result property="text" column="text"/>
+            <result property="createdAt" column="created_at"/>
+            <result property="rating" column="rating" />
+        </collection>
+    </resultMap>
+
+
+
+</mapper>

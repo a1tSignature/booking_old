@@ -1,0 +1,31 @@
+<div class="table chatComponent"  >
+  <div class="row">
+    <div class="col-10">
+      <input matInput type="text" appearance="outline" [(ngModel)]="currentMessage" placeholder="Введите текст сообщения" maxlength="100" class="fullWidthInput">
+    </div>
+    <div class="col-2">
+      <button mat-button type="send" color="primary" [disabled]="error || currentMessage.length<10" (click)="sendMessage()">Отправить</button>
+    </div>
+  </div>
+  <mat-list>
+      <mat-list-item *ngFor="let message of messages" class="list-item">
+        <mat-card >
+          <div class="row">
+            <mat-icon >perm_contact_calendar</mat-icon>
+            <mat-card-title>{{message.sentBy}}</mat-card-title>
+          </div>
+          <div class="row" >
+            <mat-icon>message</mat-icon>
+            <mat-card-content>{{message.message}}</mat-card-content>
+          </div>
+          <mat-card-footer>
+            <mat-icon>date_range</mat-icon>
+            {{message.sentAt|date: 'medium'}}</mat-card-footer>
+
+        </mat-card>
+      </mat-list-item>
+  </mat-list>
+</div>
+
+
+

@@ -1,0 +1,32 @@
+<form [formGroup]="commentForm">
+  <h1 mat-dialog-title>
+    <mat-form-field>
+      <mat-label>Заголовок</mat-label>
+      <input matInput formControlName="title" name="title" maxlength="30" required>
+      <mat-error *ngIf="commentForm.controls['title'].invalid">
+        Должно быть заполнено
+      </mat-error>
+    </mat-form-field>
+  </h1>
+  <mat-dialog-content>
+    <mat-form-field>
+      <mat-label>Текст отзыва</mat-label>
+      <textarea matInput formControlName="text" name="text" required maxlength="200"></textarea>
+      <mat-error *ngIf="commentForm.controls['text'].invalid">
+        Текст должен содержать от 30 до 200 символов
+      </mat-error>
+    </mat-form-field>
+
+    <bar-rating [(rate)]="commentForm.value['rating']" formControlName="rating" [max]="5" required [theme]="'stars'">
+      Оценка отеля
+    </bar-rating>
+    <mat-error *ngIf="commentForm.controls['rating'].invalid">
+      Должно быть заполнено
+    </mat-error>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Закрыть</button>
+    <button [disabled]="commentForm.invalid" mat-button [mat-dialog-close]="commentForm.value">Отправить</button>
+  </mat-dialog-actions>
+
+</form>

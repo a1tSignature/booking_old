@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/minibooking
+    username: postgres
+    #password: rainbow7
+    password: a1ternativeSignature
+  liquibase:
+    user: postgres
+    url: jdbc:postgresql://localhost:5432/minibooking
+    change-log: classpath*:migrations/master-changelog.yaml
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  type-handlers-package: ru.relex.miniBooking.bd.handler
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+#pathToSave: G:\relex\booking\test\frontend\frontend\src\assets\images\
+pathToSave: /Users/a1tSign/Desktop/booking/frontend/src/assets/images/
+server:
+  servlet:
+    session:
+      timeout: 30m
+      cookie:
+        secure: false
+        http-only: false
+
+

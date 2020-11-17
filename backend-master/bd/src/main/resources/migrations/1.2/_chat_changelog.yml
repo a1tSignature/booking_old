@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - preConditions:
+      - dbms:
+          type: postgresql
+  - changeSet:
+      id: booking_add_chat
+      author: Boychenko
+      comment: Added chat-related tables
+      changes:
+        - sqlFile:
+            - path: chat_implementation.sql
+            - relativeToChangelogFile: true
+

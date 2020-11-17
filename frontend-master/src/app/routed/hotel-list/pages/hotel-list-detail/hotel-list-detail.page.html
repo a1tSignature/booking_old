@@ -1,0 +1,92 @@
+
+<div class="container" *ngIf="canShow() ; else loading">
+
+  <div class="row">
+
+    <div class="title col-8">{{hotel.name}}</div>
+    <div class="col-4">
+    <mat-card >
+      <mat-icon>account_circle</mat-icon>
+      {{hotel.creatorName}}
+      <button *appPermission="Role.TENANT" mat-button (click)="startChat()">Написать</button>
+    </mat-card>
+    </div>
+  </div>
+  <div class="row"><div class="location">
+    {{hotel.location |hotelLocationPipe}}
+  </div>
+  </div>
+
+  <app-picture-gallery  [hotelId]="hotel.id"></app-picture-gallery>
+
+    <div class="row">
+      <div class="description">{{hotel.description}}</div>
+    </div>
+
+
+      <mat-chip-list >
+      <mat-chip *ngFor="let amenity of hotel.amenities" >
+        {{amenity}}
+    </mat-chip>
+      </mat-chip-list>
+
+
+
+</div>
+
+
+<app-date-change-section></app-date-change-section>
+
+
+<div class="container" *ngIf="rooms.length > 0">
+
+  <div class="col-12 list-h">Наличие мест</div>
+  <div class="list-title col-12 row">
+    <div class="col-12 col-md-3 col-lg-2 beds">Количество спальных мест</div>
+    <div class="col-12 col-md-3 col-lg-2 price">Цена за сутки</div>
+    <div class="col-12 col-md-4 col-lg-6 desc">Описание</div>
+    <div class="col-12 col-md-2 buttons"></div>
+  </div>
+
+  <div class="list-item col-12 row"
+       *ngFor="let room of rooms">
+    <div class="col-12 col-md-3 col-lg-2 beds">{{room.beds}}</div>
+    <div class="col-12 col-md-3 col-lg-2 price">{{room.dailyPrice}}<span> руб</span></div>
+    <div class="col-12 col-md-4 col-lg-6 desc">{{room.description}}</div>
+    <div class="col-12 col-md-2 buttons">
+      <div matTooltip="Войдите в аккаунт" id="button-div"
+           matTooltipPosition="after"
+           [matTooltipDisabled]="user$.getValue().hasRole(Role.TENANT)"
+      >
+        <div matTooltip="Введите дату" id="button-div-2"
+             matTooltipPosition="before"
+             [matTooltipDisabled]="lastParam.dateEnd != null && lastParam.dateStart != null"
+        >
+          <button
+            class="book"
+            [disabled]="!user$.getValue().hasRole(Role.TENANT)
+              || lastParam.dateEnd == null && lastParam.dateStart == null"
+            (click)="handleBookClick(room.id)"
+          >
+            Забронировать
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="container" *ngIf="rooms.length < 1">
+  <div class="col-12 list-h">Доступных мест нет</div>
+</div>
+
+
+<div class="container">
+  <app-comment-section *ngIf="canShow() ; else loading" [hotelId]="hotel.id" >
+  </app-comment-section>
+  <ng-template #loading>
+    <mat-spinner></mat-spinner>
+  </ng-template>
+</div>

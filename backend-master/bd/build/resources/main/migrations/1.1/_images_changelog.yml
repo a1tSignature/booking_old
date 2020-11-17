@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - preConditions:
+      - dbms:
+          type: postgresql
+  - changeSet:
+      id: booking_add_comments
+      author: Palagutin
+      comment: Added images table
+      changes:
+        - sqlFile:
+            - path: added_images.sql
+            - relativeToChangelogFile: true
+

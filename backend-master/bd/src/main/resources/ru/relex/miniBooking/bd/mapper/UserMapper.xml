@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.relex.miniBooking.bd.mapper.UserMapper">
+
+    <select id="createUser"
+            parameterType="ru.relex.miniBooking.bd.model.UserModel"
+            resultType="ru.relex.miniBooking.bd.model.UserModel">
+        INSERT INTO users (first_name, last_name, phone, email, username,country,city,street,house, password,is_active)
+        VALUES (#{firstName}, #{lastName}, #{phone}, #{email}, #{username},#{country},#{city},#{street},#{house}, #{password},true)
+            RETURNING user_id AS id, created_at
+    </select>
+
+    <insert id="saveUserRole" parameterType="map">
+        INSERT INTO user_roles (user_id, role_id)
+        VALUES (#{userId}, #{role,typeHandler=ru.relex.miniBooking.bd.handler.RoleTypeHandler})
+    </insert>
+
+    <update id = "updateUser" parameterType = "ru.relex.miniBooking.bd.model.UserModel">
+        UPDATE users SET first_name = #{firstName},
+                         last_name = #{lastName},
+                         phone = #{phone},
+                         email = #{email},
+                         username = #{username},
+                         password = #{password},
+                         country= #{country},
+                        city= #{city},
+                        street = #{street},
+                        house= #{house}
+        WHERE user_id = #{id};
+    </update>
+
+
+</mapper>

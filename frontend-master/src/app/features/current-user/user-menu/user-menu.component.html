@@ -1,0 +1,41 @@
+<ng-container *ngIf="user$ | async as user">
+
+  <ng-container
+    *ngIf="user.authenticated; else anonymousMenu"
+  >
+    <span class="username">{{ user.username }}</span>
+    <button mat-icon-button [mat-menu-trigger-for]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu">
+      <button *appPermission="Role.TENANT" mat-menu-item [routerLink]="['/hotels/bookby/', user.username]">
+        Мои бронирования
+      </button>
+      <button *appPermission="Role.LANDLORD" mat-menu-item [routerLink]="['/hotels/createdby/', user.username]">
+        Мои отели
+      </button>
+      <button mat-menu-item routerLink="/chats/myChats">
+        Мои чаты
+      </button>
+      <button mat-menu-item (click)="handleLogoutClick()">
+        Выйти
+      </button>
+    </mat-menu>
+  </ng-container>
+
+  <ng-template #anonymousMenu>
+    <div class="row">
+      <div class="col-12 col-md-4 col-lg-5">
+        <button mat-button class="log-in" routerLink="/auth/login" aria-label="Example icon button with a home icon">
+          <span>Вход</span>
+        </button>
+      </div>
+      <div class="col-12 col-md-8 col-lg-7">
+        <button mat-button class="reg" routerLink="/auth/register" aria-label="Example icon button with a home icon">
+          <span>Регистрация</span>
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</ng-container>

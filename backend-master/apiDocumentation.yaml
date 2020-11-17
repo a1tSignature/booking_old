@@ -1,0 +1,1424 @@
+swagger: "2.0"
+info:
+  description: "Booking-mini description"
+  version: "1.0-SNAPSHOT"
+  title: "Booking-mini"
+host: "localhost"
+basePath: "/api"
+tags:
+- name: "user"
+  description: "Operations about user"
+- name: "hotel"
+  description: "Operations with hotels"
+- name: "comments"
+  description: "Operations with comments"  
+- name: "auth"
+  description: "Operations with authentication" 
+- name: "room"
+  description: "Operations with rooms"  
+- name: "image"
+  description: "Operations with images (or files)"  
+- name: "chat"
+  description: "Operations with chats" 
+schemes:
+- "https"
+- "http"
+paths:
+  /auth/login:
+    post:
+      tags:
+      - "auth"
+      summary: "Login user into the system"
+      operationId: "loginUser"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "credetials"
+        schema:
+              type: "object"
+              properties:
+                username:
+                  type: "integer"
+                password:
+                  type: "integer"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "string"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "calls per hour allowed by the user"
+            X-Expires-After:
+              type: "string"
+              format: "date-time"
+              description: "date in UTC when token expires"
+        "400":
+          description: "Invalid username/password supplied" 
+  /auth/logout:
+    get:
+      tags:
+      - "auth"
+      summary: "Logout currenly logged in user"
+      description: "Can only be done by the logged in user"
+      operationId: "logoutUser"
+      responses:
+        "200":
+          description: "successful operation"
+        "401":
+          description: "Unauthorized"         
+  /user:
+    post:
+      tags:
+      - "user"
+      summary: "Create user"
+      operationId: "createUser"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "User object that sould be created"
+        required: true
+        schema:
+          $ref: "#/definitions/NewUser"
+      responses:
+        201:
+          description: "Successful user creation"
+          schema:
+            $ref: '#/definitions/User'
+        400:
+          description: "Data is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+  /user/current:
+    get:
+      tags:
+      - "user"
+      summary: "Get currently logged user"
+      description: "This can only be done by the logged in user."
+      operationId: "getCurrentUser"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        "400":
+          description: "Invalid id supplied"
+        "404":
+          description: "User not found"        
+  /user/{id}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by user name"
+      operationId: "getUserByName"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "User's id. "
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        "400":
+          description: "Invalid id supplied"
+        "404":
+          description: "User not found"
+    delete:
+      tags:
+      - "user"
+      summary: "Delete user"
+      description: "This can only be done by the logged in user."
+      operationId: "deleteUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "User's id. "
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Succesfull deletion"
+        "400":
+          description: "Invalid id supplied"
+        "404":
+          description: "User not found"
+    put:
+      tags:
+      - "user"
+      summary: "Update user info"
+      description: "This can only be done by the user whose info is updated"
+      operationId: "updateUser"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "User's id. "
+        required: true
+        type: "integer"
+      - name : "updatedUser"  
+        in: "body"
+        required : true
+        schema:
+         $ref: "#/definitions/NewUser"
+       
+      responses:
+        "200":
+          description: "Succesfull update"
+        "400":
+          description: "Invalid id supplied"
+        "403":
+          description: "Forbidden"  
+        "404":
+          description: "User not found"      
+          
+  /hotel:
+    post:
+      tags:
+      - "hotel"
+      summary: "Add new hotel"
+      description: "This can only be done by the landlord "
+      operationId: "createHotel"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Info about hotel"
+        required: true
+        schema:
+          $ref: '#/definitions/NewHotel'
+      responses:
+        201:
+          description: "Successful hotel creation"
+          schema:
+            $ref: '#/definitions/Hotel'
+        400:
+          description: "Data is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+        401:
+          description:   "Unauthorized"
+        403:
+          description:  "Forbidden"
+          
+    get:
+      tags:
+      - "hotel"
+      summary: "Get all hotels"
+      operationId: "getAllHotels"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Hotels found"
+          schema:
+              type: "object"
+              properties:
+                amount:
+                  type: "integer"
+                list:
+                  $ref: '#/definitions/Hotel'
+        400:
+          description: "Data is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+  /hotel/{id}:
+    get:
+      tags:
+      - "hotel"
+      summary: "Get hotel by id"
+      operationId: "getHotelById"
+      produces:
+      - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Hotel's id. "
+          required: true
+          type: "integer"
+      responses:
+        200:
+          description: "Hotel found"
+          schema:
+              $ref: '#/definitions/DetailedHotel'
+        400:
+          description: "Data is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+    delete:
+      tags:
+      - "hotel"
+      summary: "Delete hotel"
+      description: "This can only be done by hotel creator."
+      operationId: "deleteHotel"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Hotel's id. "
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Succesfull deletion"
+        "400":
+          description: "Invalid id supplied"
+        "403":
+          description: "Forbidden"
+        "404":
+          description: "Hotel not found"
+    put:
+      tags:
+      - "hotel"
+      summary: "Update hotel info"
+      description: "This can only be done by hotel creator."
+      operationId: "updateHotel"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "User's id. "
+        required: true
+        type: "integer"
+      - name : "updatedHotel"  
+        in: "body"
+        required : true
+        schema:
+         $ref: '#/definitions/NewHotel'
+      responses:
+        "200":
+          description: "Succesfull update"
+          schema:
+              type: "integer"
+              description: "hotel id"
+        "400":
+          description: "Invalid id supplied"
+        "403":
+          description: "Forbidden"  
+        "404":
+          description: "Hotel not found"   
+  /hotel/{country}/{city}:
+    get:
+      tags:
+      - "hotel"
+      summary: "Get hotels by location"
+      operationId: "getHotelByLocation"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "country"
+        required: true
+        type: "string"
+      - in: "path"
+        name: "city"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Hotels found"
+          schema:
+              type: "object"
+              properties:
+                amount:
+                  type: "integer"
+                list:
+                  $ref: '#/definitions/Hotel'
+        400:
+          description: "Data is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+  /hotel/{country}/{city}/byDate:
+    get:
+      tags:
+      - "hotel"
+      summary: "Get hotel info by location and dates"
+      operationId: "getHotelByDateAndLocation"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "country"
+        required: true
+        type: "string"
+      - in: "path"
+        name: "city"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "dates"
+        schema:
+            type: "object"
+            properties:
+              arrivalDate:
+                type: "string"
+                format: "date"
+              departureDate:
+                type: "string"
+                format: "date" 
+     
+               
+      responses:
+        200:
+          description: "Hotels found"
+          schema:
+              type: "object"
+              properties:
+                amount:
+                  type: "integer"
+                list:
+                  $ref: '#/definitions/Hotel'
+        400:
+          description: "Data is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+  /hotel/createdby/{username}:
+    get:
+      tags:
+      - "hotel"
+      summary: "Get hotels created by particular user."
+      operationId: "getHotelbyUser"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "username"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Hotels found"
+          schema:
+              type: "object"
+              properties:
+                amount:
+                  type: "integer"
+                list:
+                  $ref: '#/definitions/Hotel'
+        400:
+          description: "Data is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+  /hotels/{id}:
+    get:
+      tags:
+      - "hotel"
+      summary: "Get hotel by id"
+      description: ""
+      operationId: "getHotel"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "id"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "Hotel found"
+          schema:
+           $ref: '#/definitions/Hotel'
+        400:
+          description: "Data is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+  /comments:
+    post:
+      tags:
+      - "comments"
+      summary: "Add a comment"
+      description: "This can only be done by the logged in user."
+      operationId: "addComment"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Your comment to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/Comment"
+      responses:
+        201:
+          description: "Successful user creation"
+          schema:
+            $ref: '#/definitions/User'
+        400:
+          description: "Data is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+        401:
+          description:   "Unauthorized"
+  /comments/{id}:
+    get:
+      tags:
+      - "comments"
+      summary: "Get  comment by id"
+      operationId: "commentsById"
+      parameters:
+      - in: "path"
+        name: "id"
+        type: "integer"
+        description: "Id of comment"
+        required: true
+      responses:
+        200:
+          description: "Comment found"
+          schema:
+              $ref: '#/definitions/Comment'
+        400:
+          description: "Id is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+    delete:
+      tags:
+      - "comments"
+      summary: "Delete  comment by id"
+      operationId: "deleteComment"
+      parameters:
+      - in: "path"
+        name: "id"
+        type: "integer"
+        description: "Id of comment"
+        required: true
+      responses:
+        200:
+          description: "Comment deleted"
+        400:
+          description: "Id is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+        403:
+          description:  "Forbidden"   
+        404:
+          description: "Comment not found"      
+    
+  /comments/user/{username}:
+    get:
+      tags:
+      - "comments"
+      summary: "Get user's comments"
+      operationId: "commentsByUser"
+      parameters:
+      - in: "path"
+        name: "username"
+        type: "string"
+        description: "Username whose comments you want"
+        required: true
+      responses:
+        200:
+          description: "Comments found"
+          schema:
+              type: "object"
+              properties:
+                amount:
+                  type: "integer"
+                list:
+                  $ref: '#/definitions/Comment'
+        400:
+          description: "Username is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+        404:
+          description: "User not found"       
+  /comments/hotel/{hotelid}:
+    get:
+      tags:
+      - "comments"
+      summary: "Get comments for particular hotel"
+      operationId: "commentsByHotel"
+      parameters:
+      - in: "path"
+        name: "hotelid"
+        type: "integer"
+        description: "Hotel for which comments you want "
+        required: true
+      responses:
+        200:
+          description: "Comments found"
+          schema:
+              type: "object"
+              properties:
+                amount:
+                  type: "integer"
+                list:
+                  $ref: '#/definitions/Comment'
+        400:
+          description: "Data is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+        404:
+          description: "Hotel not found"        
+  /room/{Id}:
+    post:
+      tags:
+      - "room"
+      summary: "Add new room to hotel by it's id"
+      description: "This can only be done by the hotels' creator "
+      operationId: "addRoom"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "room"
+        description: "Info about hotel"
+        required: true
+        schema:
+          $ref: '#/definitions/NewRoom'
+      - in: "path"
+        name: "Id"
+        type: "integer"
+        description: "Hotel's id"
+        required: true
+      responses:
+        201:
+          description: "Successful room adding"
+          schema:
+            $ref: '#/definitions/Room'
+        400:
+          description: "Data is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+        401:
+          description:   "Unauthorized"
+        403:
+          description:  "Forbidden" 
+    put:
+      tags:
+      - "room"
+      summary: "Update existing room"
+      description: "This can only be done by the room's creator "
+      operationId: "updateRoom"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "room"
+        description: "Info about hotel"
+        required: true
+        schema:
+          $ref: '#/definitions/NewRoom'
+      - in: "path"
+        name: "Id"
+        type: "integer"
+        description: "Room's id"
+        required: true
+      responses:
+        201:
+          description: "Successful room updation"
+          schema:
+            $ref: '#/definitions/Room'
+        400:
+          description: "Data is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+        401:
+          description:   "Unauthorized"
+        403:
+          description:  "Forbidden"   
+  /room/{Id}/multiple:
+    post:
+      tags:
+      - "room"
+      summary: "Add new rooms to hotel by it's id"
+      description: "This can only be done by the hotels' creator "
+      operationId: "addMultipleRooms"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "room"
+        description: "Info about hotel"
+        required: true
+        schema:
+          type: array
+          items:
+             $ref: '#/definitions/NewRoom'
+      - in: "path"
+        name: "Id"
+        type: "integer"
+        description: "Hotel's id"
+        required: true
+      responses:
+        201:
+          description: "Successful room adding"
+          schema:
+            $ref: '#/definitions/Room'
+        400:
+          description: "Data is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+        401:
+          description:   "Unauthorized"
+        403:
+          description:  "Forbidden"           
+  /rooms/{hotelId}:
+    get:
+      tags:
+      - "room"
+      summary: "Get list of hote's room"
+      operationId: "getRoomForHotel"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "hotelId"
+        type: "integer"
+        description: "Hotel's id"
+        required: true
+      responses:
+        200:
+          description: "Rooms found"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Room'
+        400:
+          description: "HotelId is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+        401:
+          description:   "Unauthorized"
+        403:
+          description:  "Forbidden"   
+        404:
+          description: "No such hotel"
+  /rooms/booked/{userLogin}:
+    get:
+      tags:
+      - "room"
+      summary: "Get list of user's booked room"
+      operationId: "getRoomForUser"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "userLogin"
+        type: "string"
+        description: "User's login"
+        required: true
+      responses:
+        200:
+          description: "Rooms found"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Room'
+        400:
+          description: "HotelId is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+        401:
+          description:   "Unauthorized"
+        403:
+          description:  "Forbidden"   
+        404:
+          description: "No such hotel"          
+  /rooms/{hotelId}/byDate:
+    get:
+      tags:
+      - "room"
+      summary: "Get list of hote's room by dates of arrival and departure"
+      operationId: "getRoomForHotelByDate"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "hotelId"
+        type: "integer"
+        description: "Hotel's id"
+        required: true
+      - in: "query"
+        name: "arrivalDate"
+        type: string
+        format: date
+      - in: "query"
+        name: "departureDate"
+        type: string
+        format: date
+      responses:
+        200:
+          description: "Rooms found"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Room'
+        400:
+          description: "HotelId is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+        401:
+          description:   "Unauthorized"
+        403:
+          description:  "Forbidden"   
+        404:
+          description: "No such hotel"
+  /rooms/{hotelId}/{Id}:
+    delete:
+      tags:
+      - "room"
+      summary: "Delete room by id"
+      description: "This can only be done by the hotels' creator "
+      operationId: "deleteRoom"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "hotelId"
+        type: "integer"
+        description: "Hotel's id"
+        required: true
+      - in: "path"
+        name: "Id"
+        type: "integer"
+        description: "Room's id"
+        required: true    
+      responses:
+        200:
+          description: "Successful deletion"
+          schema:
+            type: "boolean"
+        400:
+          description: "HotelId or Id is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+        401:
+          description:   "Unauthorized"
+        403:
+          description:  "Forbidden"   
+        404:
+          description: "No such hotel or room" 
+  /rooms/{Id}/book:
+    put:
+      tags:
+      - "room"
+      summary: "Book room for provided dates"
+      operationId: "bookRoom"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "Id"
+        type: "integer"
+        description: "Room's id"
+        required: true 
+      - in: "query"
+        name: "arrivalDate"
+        type: string
+        format: date
+      - in: "query"
+        name: "departureDate"
+        type: string
+        format: date
+      - in: "query"
+        name: "userLogin"
+        type: string
+      responses:
+        200:
+          description: "Successful booking"
+          schema:
+            type: "object"
+            properties:
+              arrivalDate:
+                type: "string"
+                format: "date"
+              departureDate:
+                type: "string"
+                format: "date"     
+        400:
+          description: "Id's or dates provided is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+        401:
+          description:   "Unauthorized"
+        403:
+          description:  "Forbidden"   
+        404:
+          description: "No such hotel or room" 
+  /image/{hotelId}:
+    get:
+      tags:
+      - "image"
+      summary: "Get images for hotel"
+      operationId: "getImages"
+      parameters:
+      - in: "path"
+        name: "hotelId"
+        type: "integer"
+        description: "Hotel's id "
+        required: true
+      responses:
+        201:
+          description: "Images found"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Image' 
+        400:
+          description: "hotel id is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+        404:
+          description:   "Hotel not found"    
+    put:
+      tags:
+      - "image"
+      summary: "Add images for hotel"
+      description: "This can only be done by hotel's creator"
+      operationId: "addImages"
+      parameters:
+      - in: "path"
+        name: "hotelId"
+        type: "integer"
+        description: "Hotel's id "
+        required: true
+      - in: "body" 
+        name: "files"
+        schema:
+          type: "array"
+          items: 
+           $ref: '#/definitions/Image'
+      responses:
+        201:
+          description: "Images added"
+
+        400:
+          description: "Files are invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+        404:
+          description:   "Hotel not found" 
+        403:
+          description: "Forbidden"
+  /image/first/{hotelId}:
+    get:
+      tags:
+      - "image"
+      summary: "Get icon for hotel in list"
+      operationId: "getFirstImage"
+      parameters:
+      - in: "path"
+        name: "hotelId"
+        type: "integer"
+        description: "Hotel's id "
+        required: true
+      responses:
+        200:
+          description: "Image found"
+          schema:
+              $ref: '#/definitions/Image' 
+        400:
+          description: "hotel id is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+        404:
+          description:  "Hotel not found" 
+          
+  /chat:
+    post:
+      tags:
+      - "chat"
+      summary: "Send message"
+      operationId: "sendMessage"
+      parameters:
+      - in: "body"
+        name: "message"
+        schema:
+          $ref: '#/definitions/Message'
+      responses:
+        200:
+          description: "Message sent"
+        400:
+          description: "Message is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+        404:
+            description:  "Chat not found"        
+  /chat/create:
+    post:
+      tags:
+      - "chat"
+      summary: "Start chat"
+      operationId: "createChat"
+      parameters:
+      - in: "body"
+        name: "chatModel"
+        schema:
+          $ref: '#/definitions/ChatModel'
+      responses:
+        201:
+          description: "Chat created"
+          schema:
+              $ref: '#/definitions/ChatModel' 
+        400:
+          description: "One of user's id is invalid"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/ErrorResponse'
+        404:
+          description:  "User not found" 
+  /chat/mychats:
+    get:
+      tags:
+      - "chat"
+      summary: "Get list of my chats"
+      operationId: "getMyChats"
+      responses:
+        200:
+          description: "Your chats"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ChatListItem'
+        403:
+          description:  "Not authenticated" 
+  /chat/messages/{chatId}:
+    get:
+      tags:
+      - "chat"
+      summary: "Get messages for chat"
+      operationId: "getChatMessages"
+      parameters:
+      - in: "path"
+        name: "chatId"
+        type: "integer"
+        description: "Chat's id "
+        required: true
+      responses:
+        200:
+          description: "Messages found"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Message'
+        403:
+          description:  "You dont have access to that chat"        
+        404:  
+          description:  "Chat not found"        
+
+definitions:
+  Hotel:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        minimum: 1
+      name:
+        type: "string"
+        maxLength:  30
+        minLength: 4
+        example: "Zastava"
+      location:
+        type: "object"
+        properties:
+          country:
+            type: "string"
+            minLength: 3
+            example: "Russia"
+          city:
+            type: "string"
+            minLength: 3
+            example: "Voronezh"
+          street:
+            type: "string"
+            example: "Moskovsky prospect"
+          house:
+            type: "string"
+            example: "21d"
+            maxLength: 10
+      description:
+        type: "string"
+        minLength: 30
+        maxLength: 500
+        example: "Zastava Hotel is located in Voronezh, 2.1 km from Central City Stadium and 3.3 km from Sunny Paradise Shopping Center. Offering city views, air-conditioned rooms have a desk and free Wi-Fi."
+      amenities:
+        type: array
+        items:
+          type: string
+        example: ["free wifi","parking", "near beach"]
+      createdAt:
+        type: "string"
+        format: "date-time"
+        example: "2020-07-13T10:30:00Z"
+  DetailedHotel:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        minimum: 1
+      name:
+        type: "string"
+        maxLength:  30
+        minLength: 4
+        example: "Zastava"
+      location:
+        type: "object"
+        properties:
+          country:
+            type: "string"
+            minLength: 3
+            example: "Russia"
+          city:
+            type: "string"
+            minLength: 3
+            example: "Voronezh"
+          street:
+            type: "string"
+            example: "Moskovsky prospect"
+          house:
+            type: "string"
+            example: "21d"
+            maxLength: 10
+      description:
+        type: "string"
+        minLength: 30
+        maxLength: 500
+        example: "Zastava Hotel is located in Voronezh, 2.1 km from Central City Stadium and 3.3 km from Sunny Paradise Shopping Center. Offering city views, air-conditioned rooms have a desk and free Wi-Fi."
+      amenities:
+        type: array
+        items:
+          type: string
+        example: ["free wifi","parking", "near beach"]
+      createdAt:
+        type: "string"
+        format: "date-time"
+        example: "2020-07-13T10:30:00Z" 
+      CreatorName:
+        type: "string"
+        maxLength:  30
+        minLength: 4
+        example: "Vasya"   
+      CreatorId:
+        type: "integer"
+        minimum: 1
+        example: 1 
+  NewHotel:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        maxLength:  30
+        minLength: 4
+        example: "Zastava"
+      location:
+        type: "object"
+        properties:
+          country:
+            type: "string"
+            minLength: 3
+            example: "Russia"
+          city:
+            type: "string"
+            minLength: 3
+            example: "Voronezh"
+          street:
+            type: "string"
+            example: "Moskovsky prospect"
+          house:
+            type: "string"
+            example: "21d"
+            maxLength: 10
+      description:
+        type: "string"
+        minLength: 30
+        maxLength: 500
+        example: "Zastava Hotel is located in Voronezh, 2.1 km from Central City Stadium and 3.3 km from Sunny Paradise Shopping Center. Offering city views, air-conditioned rooms have a desk and free Wi-Fi."
+      amenities:
+        type: array
+        items:
+          type: string
+        example: ["free wifi","parking", "near beach"]
+           
+  User:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format:  "int64"
+          minimum: 1
+        username:
+          type: "string"
+          minLength: 5
+          maxLength: 64
+          example: "user1"
+        role:
+          type: "string"
+          description: "Whether he wants to book or rent hotel"
+          enum:
+            - LANDLORD
+            - TENANT
+        personalInfo:
+          type: "object"
+          properties:
+              firstName:
+                type: "string"
+                minLength: 1
+                maxLength: 50
+              lastName:
+                type: "string"
+                minLength: 1
+                maxLength: 50
+              email:
+                description: email of the user
+                type: "string"
+                minLength: 5
+              phoneNumber:
+                type: "string"
+                maxLength: 15
+              location:
+                type: "object"
+                properties:
+                  country:
+                    type: "string"
+                    minLength: 3
+                    example: "Russia"
+                  city:
+                    type: "string"
+                    minLength: 3
+                    example: "Voronezh"
+                  street:
+                    type: "string"
+                    minLength: 3
+                    example: "Voroshilova"
+                  house:
+                    type: "string"
+                    minLength: 1
+                    example: "21d"  
+        createdAt:
+            type: "string"
+            format: "date-time"
+            example: "2020-07-13T10:30:02Z"
+  NewUser:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+        minLength: 5
+        maxLength: 64
+        example: "user1"
+      password:
+        type: "string"
+        minLength: 8
+        maxLength: 128
+      role:
+        type: "string"
+        description: "Whether he wants to book or rent hotel"
+        enum:
+          - LANDLORD
+          - TENANT
+      location:
+          type: "object"
+          properties:
+              country:
+                 type: "string"
+                 minLength: 3
+                 example: "Russia"
+              city:
+                 type: "string"
+                 minLength: 3
+                 example: "Voronezh"
+              street:
+                 type: "string"
+                 minLength: 3
+                 example: "Voroshilova"
+              house:
+                 type: "string"
+                 minLength: 1
+                 example: "21d"
+  Comment:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      hotelId:
+        type: "integer"
+        format: "int64"
+        minimum: 1
+      createdBy:
+        type: "string"
+        minLength: 5
+        maxLength: 64
+        example: "user1"
+      title:
+        type: "string"
+        minLength: 1
+        maxLength: 50
+      text:
+        type: "string"
+        minLength: 10
+        maxLength: 500
+      createdAt:
+        type: "string"
+        format: "date-time"
+        example: "2020-07-13T10:30:00Z"
+      rating:
+        type: "integer"
+        minimum: 1
+        maximum: 5
+  Room:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      hotelId:
+        type: "integer"
+        format: "int64"
+        minimum: 1
+      beds:
+        type: "integer"
+        format: "int64"
+        minimum: 1
+      dailyPrice:
+        type: "integer"
+        minimum: 1
+        maximum: 5   
+      description:
+        type: "string"
+        minLength: 30
+        maxLength: 500    
+  NewRoom:
+    type: "object"
+    properties:
+      hotelId:
+        type: "integer"
+        format: "int64"
+        minimum: 1
+      beds:
+        type: "integer"
+        format: "int64"
+        minimum: 1
+      dailyPrice:
+        type: "integer"
+        minimum: 1
+        maximum: 5   
+      description:
+        type: "string"
+        minLength: 30
+        maxLength: 500
+  Image:
+    type: "object"
+    properties:
+      lg: 
+       type: "string"
+       description: "Path to image in large resolution"
+       example: "hotel-image1.jpg"
+  ChatListItem: 
+    type: "object"
+    properties:
+      chatId: 
+       type: "integer"
+       description: "Chat's id"
+       example: 32
+      partnerName: 
+       type: "string"
+       description: "Name of your chat partner"
+       example: "sampleUser2"
+      lastMessage: 
+       type: "string"
+       description: "Last message on chat"
+       example: "Hello there"
+  ChatModel: 
+    type: "object"
+    properties:
+      chatId: 
+       type: "integer"
+       description: "Chat's id"
+       example: 32
+      landlordId: 
+       type: "integer"
+       description: "Landlord's id"
+       example: 3
+  Message: 
+    type: "object"
+    properties:
+      chatId: 
+       type: "integer"
+       description: "Chat's id"
+       example: 32
+      sentBy: 
+       type: "string"
+       description: "User who sent the message"
+       example: "sampleUser2"
+      message: 
+       type: "string"
+       description: "Message text"
+       example: "Hello there "
+      sentAt: 
+       type: "string"
+       format: date
+       description: "When the message was sent"
+      
+  ErrorResponse:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+      description:
+        type: "string"
+      payload:
+        type: "object"
+

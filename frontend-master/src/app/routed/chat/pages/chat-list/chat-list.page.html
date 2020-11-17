@@ -1,0 +1,15 @@
+<h1 align="center">Мои чаты</h1>
+  <mat-list class="table" >
+    <mat-list-item *ngFor="let chat of chats" class="list-item" (click)="openDialog(chat.chatId)">
+      <mat-card class="row">
+        <mat-card-title>
+          <mat-icon>perm_contact_calendar</mat-icon>
+          {{chat.partnerName}}
+        </mat-card-title>
+        <mat-card-content>
+          <mat-icon>message</mat-icon>
+          {{chat.lastMessage}}
+        </mat-card-content>
+      </mat-card>
+    </mat-list-item>
+  </mat-list>

@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - preConditions:
+      - dbms:
+          type: postgresql
+  - changeSet:
+      id: booking1
+      author: Boychenko
+      comment: Create initial information
+      changes:
+        - sqlFile:
+            path: booking1.sql
+            relativeToChangelogFile: true
+

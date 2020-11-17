@@ -1,0 +1,168 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <mat-card class="newHotelCard" align="center">
+        <form [formGroup]="hotelForm">
+          <h1 align="center">
+            Добавление нового отеля:
+          </h1>
+          <mat-card-title>
+            Основная Информация
+          </mat-card-title>
+          <mat-card-content>
+            <div class="table">
+              <div class="row" id="title">
+                <div class="col-sm">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Название</mat-label>
+                    <input matInput formControlName="name" placeholder="Ex. Plaza" value="">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm">
+                  <mat-error *ngIf="hotelForm.controls['name'].invalid">
+                    Название должно быть не короче 4-х символов
+                  </mat-error>
+                </div>
+              </div>
+              <div class="row" id="descr">
+                <div class="col-sm">
+                  <mat-form-field class="fullWidthInput" appearance="outline">
+                    <mat-label>Описание</mat-label>
+                    <textarea matInput formControlName="description" name="description" maxlength="450" required></textarea>
+                  </mat-form-field>
+                </div>
+
+              </div>
+              <mat-error *ngIf="hotelForm.controls['description'].invalid">
+                Описание должно быть не короче 50 символов
+              </mat-error>
+              <mat-card-title id="loc">
+                <p>Расположение</p>
+              </mat-card-title>
+              <div [formGroup]="hotelForm.get('location')" class="row row-cols-xs-1">
+                <div class="col col-lg-3 col-md-6 col-sm-12  ">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Страна</mat-label>
+                    <input matInput formControlName="country" maxlength="50" placeholder="Ex. Russia">
+                  </mat-form-field>
+                </div>
+                <div class="col-12 col-lg-3 col-md-6 col-sm-12 ">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Город</mat-label>
+                    <input matInput formControlName="city"  maxlength="50" placeholder="Ex. Voronezh">
+                  </mat-form-field>
+                </div>
+                <div class="col-12 col-lg-3 col-md-6 col-sm-12 ">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Улица</mat-label>
+                    <input matInput formControlName="street" maxlength="50" placeholder="Ex. Voroshilova">
+                  </mat-form-field>
+                </div>
+                <div class="col-12 col-lg-3 col-md-6 col-sm-12 ">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Строение</mat-label>
+                    <input matInput formControlName="house" #houseNumber maxlength="5" placeholder="Ex. 21d">
+                    <mat-hint align="end">{{houseNumber.value.length}} / 5</mat-hint>
+                  </mat-form-field>
+                </div>
+              </div>
+              <mat-error *ngIf="hotelForm.controls['location'].invalid">
+                Некорректный адрес
+              </mat-error>
+
+              <mat-card-title id="ament">
+                <p>Удобства</p>
+              </mat-card-title>
+              <mat-error *ngIf="hotelForm.controls['amenities'].invalid">
+                Необходимо указать не меньше 4-х удобств
+              </mat-error>
+              <div class="row">
+                <mat-form-field class="fullWidthInput" appearance="outline">
+                  <mat-chip-list #chipList aria-label="Fruit selection">
+                    <mat-chip class="colored" *ngFor="let amenity of amenities" [selectable]="selectable"
+                              [removable]="removable" (removed)="remove(amenity)">
+                      {{amenity}}
+                      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                    </mat-chip>
+                    <input placeholder="Добавить удобство"
+                           [matChipInputFor]="chipList"
+                           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                           [matChipInputAddOnBlur]="addOnBlur"
+                           (matChipInputTokenEnd)="add($event)">
+                  </mat-chip-list>
+                </mat-form-field>
+              </div>
+              <mat-card-title id="room">
+                <p>Номера</p>
+              </mat-card-title>
+              <mat-error *ngIf="hotelForm.controls['rooms'].invalid">
+                Необходимо добавить не меньше 4-х номеров
+              </mat-error>
+              <mat-accordion class="example-headers-align" multi>
+                <mat-expansion-panel formArrayName="rooms" id="room-it" *ngFor="let room of roomsArray.controls; index as i" [formGroup]="room" >
+                  <mat-expansion-panel-header>
+                    <button mat-button (click)="deleteRoom(i)">
+                      <mat-icon>delete_forever</mat-icon>
+                    </button>
+                    <mat-panel-title>
+                      <mat-icon>meeting_room</mat-icon>
+                      Комната № {{i+1}}
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      Добавить информацию о комнате
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <div class="row">
+                      <mat-form-field>
+                        <mat-label>Спальных мест</mat-label>
+                        <input matInput type="number" [formControl]="room.get('beds')" min="1">
+                      </mat-form-field>
+                      <mat-form-field>
+                        <mat-label>Цена за сутки</mat-label>
+                        <input matInput [formControl]="room.get('dailyPrice')" type="number" min="1">
+                      </mat-form-field>
+                      <mat-form-field>
+                        <mat-label>Описание</mat-label>
+                        <input matInput [formControl]="room.get('description')" maxlength="50">
+                      </mat-form-field>
+                    <mat-error *ngIf="room.invalid">
+                      Кол-во спальных мест и цена должны быть цифрами, описание не короче 20 символов
+                    </mat-error>
+
+                  </div>
+                </mat-expansion-panel>
+              </mat-accordion>
+              <button mat-button (click)="addRoom()" id="add-room">
+                <mat-icon>add_circle</mat-icon>
+              </button>
+              <div class="images">
+                <mat-card-title id="photo">
+                  <p>Фотографии</p>
+                </mat-card-title>
+                <mat-error *ngIf="hotelForm.controls['images'].invalid">
+                  Загрузите как минимум 4 фотографии
+                </mat-error>
+                <div class="custom-dropzone" ngx-dropzone [accept]="'image/*'" (change)="onSelect($event)">
+                  <ngx-dropzone-label>
+                    <div>
+                      <h2>Добавить фотографии</h2>
+                    </div>
+                  </ngx-dropzone-label>
+                  <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f"
+                                              [removable]="true" (removed)="onRemove(f)">
+                    <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                  </ngx-dropzone-image-preview>
+                </div>
+              </div>
+
+            </div>
+          </mat-card-content>
+          <button id="add" mat-button (click)="send()" [disabled]="hotelForm.invalid">Добавить отель</button>
+        </form>
+      </mat-card>
+    </div>
+  </div>
+</div>
+

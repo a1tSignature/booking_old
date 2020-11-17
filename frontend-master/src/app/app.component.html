@@ -1,0 +1,21 @@
+<mat-toolbar class="mat-toolbar-up">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-5 col-lg-7">
+        <a class="home" href="/hotels" aria-label="Example icon button with a home icon">
+          Mini-booking
+        </a>
+      </div>
+      <div  class="col-12 col-md-3 col-lg-2">
+        <button *appPermission="Role.LANDLORD"   mat-button class="add" routerLink="/hotels/add" aria-label="Example icon button with a home icon">
+          <span>Добавить отель</span>
+        </button>
+      </div>
+      <div  class="col-12 col-md-4 col-lg-3">
+        <app-user-menu></app-user-menu>
+      </div>
+    </div>
+  </div>
+</mat-toolbar>
+
+<router-outlet></router-outlet>

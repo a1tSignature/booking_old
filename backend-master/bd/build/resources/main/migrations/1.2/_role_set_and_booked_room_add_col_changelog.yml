@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - preConditions:
+      - dbms:
+          type: postgresql
+  - changeSet:
+      id: booking_role_set_and_booked_room_add_col
+      author: Ryabovskii
+      comment: Role set and booked_room add col
+      changes:
+        - sqlFile:
+            - path: role_set_and_booked_room_add_col.sql
+            - relativeToChangelogFile: true
+

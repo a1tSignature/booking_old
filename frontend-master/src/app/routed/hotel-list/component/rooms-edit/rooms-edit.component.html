@@ -1,0 +1,49 @@
+<h1 mat-dialog-title>Добавление комнат: </h1>
+<mat-dialog-content>
+<mat-accordion class="example-headers-align" multi>
+  <mat-expansion-panel *ngFor="let room of roomsArray.controls; index as i"
+                       [formGroup]="room" id="item">
+    <mat-expansion-panel-header>
+      <button mat-button (click)="deleteRoom(i)">
+        <mat-icon>delete_forever</mat-icon>
+      </button>
+      <mat-panel-title>
+        <mat-icon>meeting_room</mat-icon>
+        Комната № {{i+1}}
+      </mat-panel-title>
+      <mat-panel-description>
+        Добавить информацию
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div class="row">
+      <mat-form-field>
+        <mat-label>Кол-во спальных мест</mat-label>
+        <input matInput type="number" [formControl]="room.get('beds')" min="1">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Цена за сутки</mat-label>
+        <input matInput [formControl]="room.get('dailyPrice')" type="number" min="1">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Описание</mat-label>
+        <input matInput [formControl]="room.get('description')">
+      </mat-form-field>
+      <mat-error *ngIf="room.invalid">
+        Кол-во спальных мест и цена должны быть цифрами, описание не короче 20 символов
+      </mat-error>
+
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
+  <button mat-button  (click)="addRoom()">
+    <mat-icon>add_circle</mat-icon>
+  </button>
+</mat-dialog-content>
+<mat-dialog-actions>
+<button mat-button [disabled]="roomForm.invalid" (click)="submit()" >
+  Подтвердить
+</button>
+  <button mat-button  color="warn" (click)="dialogRef.close()">
+  Закрыть
+</button>
+</mat-dialog-actions>

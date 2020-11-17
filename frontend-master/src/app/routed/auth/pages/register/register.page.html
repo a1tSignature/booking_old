@@ -1,0 +1,159 @@
+<div class="container">
+
+  <mat-card class="registerCard">
+    <form [formGroup]="userForm">
+      <mat-card-title>
+        <p>Регистрация</p>
+      </mat-card-title>
+      <mat-card-content>
+        <div class="table">
+          <div class="row">
+            <div class="col-sm">
+              <mat-form-field appearance="fill">
+                <mat-label>Логин</mat-label>
+                <input matInput ngModel formControlName="username" required/>
+              </mat-form-field>
+            </div>
+            <div class="col-sm">
+              <mat-form-field appearance="fill">
+                <mat-label>Пароль</mat-label>
+                <input matInput type="password" ngModel formControlName="password" required/>
+              </mat-form-field>
+            </div>
+            <div class="col-sm">
+              <mat-form-field appearance="fill">
+                <mat-label>Повторите пароль</mat-label>
+                <input matInput type="password" name="confirm" formControlName="confirmPassword" required/>
+              </mat-form-field>
+            </div>
+            <div class="col-sm">
+              <mat-form-field appearance="fill">
+                <mat-label>Моя роль</mat-label>
+                <mat-select formControlName="role">
+                  <mat-option *ngFor="let roleName of role| roleNames " [value]="roleName">
+                    {{roleName}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm">
+              <mat-error *ngIf="userForm.controls['username'].invalid">
+                Длина логина минимум 4 символа
+              </mat-error>
+            </div>
+            <div class="col-sm">
+              <mat-error *ngIf="userForm.controls['password'].invalid">
+                Длина пароля минимум 8 символов
+              </mat-error>
+            </div>
+            <div class="col-sm">
+              <mat-error *ngIf="userForm.hasError('passwordsNotMatch')">
+                Пароли не совпадают
+              </mat-error>
+            </div>
+            <div class="col-sm">
+              <mat-error *ngIf="userForm.controls['role'].invalid">
+                Выберите роль
+              </mat-error>
+            </div>
+          </div>
+        </div>
+
+      </mat-card-content>
+      <mat-card-title>Персональные данные</mat-card-title>
+      <mat-card-content>
+        <div [formGroup]="userForm.get('personalInfo')" class="table">
+          <div class="row">
+            <div class="col-sm">
+              <mat-form-field appearance="fill">
+                <mat-label>Имя</mat-label>
+                <input matInput formControlName="firstName" maxlength="50" placeholder="Василий">
+              </mat-form-field>
+            </div>
+            <div class="col-sm">
+              <mat-form-field appearance="fill">
+                <mat-label>Фамилия</mat-label>
+                <input matInput formControlName="lastName" maxlength="50" placeholder="Пупкин">
+              </mat-form-field>
+            </div>
+            <div class="col-sm">
+              <mat-form-field appearance="fill">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" formControlName="email" placeholder="vasya2000@ya.ru">
+              </mat-form-field>
+            </div>
+            <div class="col-sm">
+              <mat-form-field appearance="fill">
+                <mat-label>Номер телефона</mat-label>
+                <input matInput type="number" formControlName="phoneNumber" placeholder="8912312578" >
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm">
+              <mat-error *ngIf="userForm.controls['personalInfo'].get('firstName').invalid">
+                Ошибка в поле имени
+              </mat-error>
+            </div>
+            <div class="col-sm">
+              <mat-error *ngIf="userForm.controls['personalInfo'].get('lastName').invalid">
+                Ошибка в поле фамилии
+              </mat-error>
+            </div>
+            <div class="col-sm">
+              <mat-error *ngIf="userForm.controls['personalInfo'].get('email').invalid">
+                Некорректный email
+              </mat-error>
+            </div>
+            <div class="col-sm">
+              <mat-error *ngIf="userForm.controls['personalInfo'].get('phoneNumber').invalid">
+                Некорректный номер телефона
+              </mat-error>
+            </div>
+          </div>
+        </div>
+        <mat-card-title>
+          <p>Ваш адрес</p>
+        </mat-card-title>
+        <div [formGroup]="userForm.get('personalInfo')" class="table">
+          <div formGroupName="location" class="row">
+            <div class="col-sm">
+              <mat-form-field appearance="fill">
+                <mat-label>Страна</mat-label>
+                <input matInput formControlName="country" maxlength="50" placeholder="Россия">
+              </mat-form-field>
+            </div>
+            <div class="col-sm">
+              <mat-form-field appearance="fill">
+                <mat-label>Город</mat-label>
+                <input matInput formControlName="city" maxlength="50" placeholder="Воронеж">
+              </mat-form-field>
+            </div>
+            <div class="col-sm">
+              <mat-form-field appearance="fill">
+                <mat-label>Улица</mat-label>
+                <input matInput formControlName="street" maxlength="50" placeholder="Ворошилова">
+              </mat-form-field>
+            </div>
+            <div class="col-sm">
+              <mat-form-field appearance="fill">
+                <mat-label>Дом</mat-label>
+                <input matInput formControlName="house" #houseNumber maxlength="5" placeholder="21д">
+                <mat-hint align="end">{{houseNumber.value.length}} / 5</mat-hint>
+              </mat-form-field>
+            </div>
+          </div>
+          <mat-error *ngIf="userForm.controls['personalInfo'].get('location').invalid">
+            Некорректный адрес
+          </mat-error>
+        </div>
+
+      </mat-card-content>
+      <button mat-button (click)="onRegisterClick()" [disabled]="userForm.invalid">Зарегестрироваться</button>
+    </form>
+  </mat-card>
+</div>
+
+

@@ -1,0 +1,39 @@
+<div class="block">
+  <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+  <div class="container">
+
+    <h1 *ngIf="items.length > 0"><span>{{username}}</span>, ваш список бронирований:</h1>
+    <h1 *ngIf="items.length == 0"><span>{{username}}</span>, ваш список бронирований пуст</h1>
+
+
+
+    <div class="row item" *ngFor="let item of items">
+
+      <div class="col-12 title">
+        <a [routerLink]="['/hotels',item.hotelId]" >{{item.hotelName }}</a>
+      </div>
+
+      <div class="col-12 date">
+        <div class="arrival">{{item.arrival.match(".*-..-..")}}</div>
+        <div> - </div>
+        <div class="departure">{{item.departure.match(".*-..-..")}}</div>
+      </div>
+
+      <div class="col-12 col-sm-4">
+        <div class="info-title">
+          Информация о номере:
+        </div>
+        <div class="info" id="info">
+          <div class="beds">Спальных мест: {{item.beds}}</div>
+          <div class="price">Стоимость в сутки: {{item.dailyPrice}}<span> руб</span></div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-8 description">
+        {{item.description}}
+      </div>
+
+    </div>
+
+
+  </div>
+</div>

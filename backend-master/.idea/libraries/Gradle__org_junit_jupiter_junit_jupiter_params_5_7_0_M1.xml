@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.junit.jupiter:junit-jupiter-params:5.7.0-M1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-params/5.7.0-M1/e15a406448604d412355b73990c27194dba2c9c0/junit-jupiter-params-5.7.0-M1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-params/5.7.0-M1/9efa4def7d3d8367fcbb0ce31783cbe601119578/junit-jupiter-params-5.7.0-M1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,94 @@
+\:host
+  display: flex
+  flex-direction: column
+
+h3
+  font-size: 22px
+  margin-top: 40px
+
+.list-item
+  cursor: pointer
+  &:hover
+    background-color: rgba(0,0,0,.1)
+
+.block
+  min-width: 400px
+
+.list-item
+  margin-top: 20px
+  padding-top: 20px
+  padding-bottom: 20px
+  min-height: 200px
+  a
+    width: 100%
+    color: black
+    img
+      margin-left: 20px
+      display: block
+      height: 180px
+      width: 180px
+  a:hover
+    text-decoration: none
+  .row
+    width: 100%
+  .title
+    margin-top: 20px
+    font-size: 24px
+  .location
+    margin-top: 20px
+    font-size: 16px
+  .ament
+    background: aliceblue
+    border: aliceblue 2px solid
+    border-radius: 9px
+    padding: 1px 5px
+    margin-top: 20px
+    display: inline-block
+    margin-right: 6px
+  .description
+    margin-top: 25px
+    font-size: 16px
+    margin-right: 20px
+    line-height: 23px
+    max-height: 160px
+    overflow: auto
+
+
+
+
+
+@media screen and (max-device-width: 767px)
+  .list-item
+    margin-top: 30px
+    padding-top: 20px
+    min-height: 200px
+    .description
+      margin-top: 0px
+      margin-left: 40px
+
+
+
+
+
+
+
+\::-webkit-scrollbar
+  width: 5px
+  background-color: rgba(0, 0, 0, 0)
+  -webkit-border-radius: 100px
+
+  &:hover
+    background-color: rgba(0, 0, 0, 0.09)
+
+\::-webkit-scrollbar-thumb:vertical
+  background-color: rgba(255, 0, 0, 0)
+  -webkit-border-radius: 100px
+
+  &:active
+    background: rgba(0, 0, 0, 0.61)
+
+a:hover
+  \::-webkit-scrollbar-thumb:vertical
+    background-color: rgba(0, 0, 0, 0.09)
+
+

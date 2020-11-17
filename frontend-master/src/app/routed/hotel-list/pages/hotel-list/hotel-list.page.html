@@ -1,0 +1,60 @@
+<app-search-section></app-search-section>
+
+<div class="block">
+
+
+  <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <mat-paginator
+          *ngIf="!(items.length == 0 && loading == false)"
+          [pageSizeOptions]="[1, 2, 5, 10]"
+          [pageSize]="pageSize"
+          [pageIndex]="page"
+          [length]="total"
+          [showFirstLastButtons]="true"
+          (page)="handlePageChange($event)"
+
+        >
+        </mat-paginator>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <h3 *ngIf="items.length == 0 && loading == false">По данным параметрам ничего не найдено</h3>
+          <div class="list-item"
+            *ngFor="let hotel of items, let i = index"
+            >
+            <a
+               [routerLink]="hotel.id"
+               [queryParams]="{
+               'dateStart': lastParam.dateStart,
+               'dateEnd': lastParam.dateEnd
+               }"
+            >
+              <div class="row">
+                <div class="col-7 col-md-4 col-lg-3">
+                  <img src="{{waysToImages.get(hotel.id)}}" alt="">
+                </div>
+                <div class="col-5 col-md-3 col-lg-3">
+                  <div class="title">{{hotel.name}}</div>
+                  <div class="location">{{hotel.location |hotelLocationPipe}}</div>
+                  <div class="ament"
+                       *ngFor="let ament of hotel.amenities"
+                  >
+                    {{ament}}
+                  </div>
+                </div>
+                <div class="col-12 col-md-5 col-lg-6">
+                  <div class="description ">{{hotel.description}}</div>
+                </div>
+
+              </div>
+            </a>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+

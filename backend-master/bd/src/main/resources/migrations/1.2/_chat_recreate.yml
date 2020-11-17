@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - preConditions:
+      - dbms:
+          type: postgresql
+  - changeSet:
+      id: chat_recreate
+      author: Boychenko
+      comment: Added chat-related tables
+      changes:
+        - sqlFile:
+            - path: chat_recreate.sql
+            - relativeToChangelogFile: true
